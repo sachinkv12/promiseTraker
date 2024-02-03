@@ -70,21 +70,39 @@ Router.put("/users/:userId", async (req, res) => {
   }
 });
 
-Router.get("/profile/:userId", async (req, res) => {
-  const userId = req.params.userId;
+// Router.get("/profile/:userId", async (req, res) => {
+//   const userId = req.params.userId;
+
+//   try {
+//     // console.log('user',userId)
+//     const profile = await UserSchema.findById(userId);
+
+//     if (!profile) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+//     console.log(profile)
+//     res.json(profile);
+//   } catch (error) {
+//     console.error("Error fetching user profile:", error.message);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+Router.get('/users/:userId', async (req, res) => {
+  const userid = req.params.userId;
 
   try {
-    // console.log('user',userId)
-    const profile = await UserSchema.findById(userId);
+      // Find the user by ID in the database
+      const user = await UserSchema.findOne({ _id: userId });
 
-    if (!profile) {
-      return res.status(404).json({ error: "User not found" });
-    }
+      if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+      }
 
-    res.json(profile);
+      // Return the user data
+      res.json(user);
   } catch (error) {
-    console.error("Error fetching user profile:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
