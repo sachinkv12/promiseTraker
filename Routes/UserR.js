@@ -87,22 +87,26 @@ Router.put("/users/:userId", async (req, res) => {
 //     res.status(500).json({ error: "Internal Server Error" });
 //   }
 // });
-Router.get('/users/:userId', async (req, res) => {
-  const userid = req.params.userId;
-
+Router.get('/user/:userId', async (req, res) => {
   try {
-      // Find the user by ID in the database
-      const user = await UserSchema.findOne({ _id: userId });
+    const userId = req.params.userId;
 
-      if (!user) {
-          return res.status(404).json({ error: 'User not found' });
-      }
+    // Check if userId is not provided or not a valid ObjectId
+    if (!userId) {
+      return res.status(400).json({ message: 'Invalid userId' });
+    }
 
-      // Return the user data
-      res.json(user);
+    const user = await UserSchema.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Send the user data as a JSON response
+    res.json(user);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 

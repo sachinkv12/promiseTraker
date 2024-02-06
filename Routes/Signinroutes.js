@@ -5,9 +5,10 @@ const Register = require('../modules/UserSchema');
 const Router = express.Router();
 const Signin = require('../modules/Signin');
 const bcrypt = require('bcrypt');
+const secretKey = 'mytestsecretkey'
 
 // Replace 'your-generated-secret-key' with the key generated using the provided script
-const secretKey = 'your-generated-secret-key';
+
 
 Router.post('/Signin', async (req, res) => {
   const { email, password } = req.body;
@@ -33,8 +34,8 @@ Router.post('/Signin', async (req, res) => {
       secretKey    );
       // console.log(token);
 
-    res.status(200).json({ token, user });
-  } catch (error) {
+      res.status(200).json({ userId: user._id, token });
+      } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
