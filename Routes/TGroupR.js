@@ -25,11 +25,14 @@ app.post('/TGroups', async (req, res) => {
 });
 
     app.get('/TGroups', async (req, res) => {
+      // console.log(req)
     try {
       const taskGroups = await TGroupSchema.find().sort({ createdAt: -1 });
-  
+      // console.log(res)
+
       res.json(taskGroups);
     } catch (error) {
+      
       console.error('Error fetching task groups:', error.message);
       res.status(500).json({ error: 'Internal Server Error' });
     }

@@ -3,7 +3,7 @@ const mongoose=require('mongoose');
 
 const SigninSchema=new mongoose.Schema({
     email:{type:String},
-    password:{type:String},
+    password:{type:String}, 
     
 
 })

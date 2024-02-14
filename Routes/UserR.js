@@ -1,6 +1,6 @@
 // const { default: mongoose } = require("mongoose");
 
-const { json } = require("express");
+// const { json } = require("express");
 const UserSchema = require("../modules/UserSchema");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -17,7 +17,7 @@ Router.post("/registration", async (req, res) => {
 
   try {
     const existinguser = await UserSchema.findOne({ email: email });
-    if (existinguser) { 
+    if (existinguser) {
       return res.status(400).json({ message: "already registerd" });
     }
     const salt = await bcrypt.genSalt(10);
@@ -70,55 +70,54 @@ Router.put("/users/:userId", async (req, res) => {
   }
 });
 
-// Router.get("/profile/:userId", async (req, res) => {
-//   const userId = req.params.userId;
-
-//   try {
-//     // console.log('user',userId)
-//     const profile = await UserSchema.findById(userId);
-
-//     if (!profile) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
-//     console.log(profile)
-//     res.json(profile);
-//   } catch (error) {
-//     console.error("Error fetching user profile:", error.message);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-Router.get('/user/:userId', async (req, res) => {
+Router.get("/user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
 
     // Check if userId is not provided or not a valid ObjectId
     if (!userId) {
-      return res.status(400).json({ message: 'Invalid userId' });
+      return res.status(400).json({ message: "Invalid userId" });
     }
 
     const user = await UserSchema.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Send the user data as a JSON response
     res.json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 Router.get("/registeredNames", async (req, res) => {
   try {
     const getData = await UserSchema.find();
-    const names = getData.map((item) => item.name);
 
-    res.json(names);
+    const userNames = getData.map((item) => ({
+      id: item._id,
+      name: item.name,
+    }));
+
+    res.json(userNames);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
+// Router.get('/registeredNames', async (req, res) => {
+//   // console.log('sachi')
+//   try {
+//       const users = await UserSchema.find({}, '_id name');
+//       const simplifiedUsers = users.map(user => ({ _id: user._id, name: user.name }));
+//       res.json(simplifiedUsers);
+//   } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 module.exports = Router;
