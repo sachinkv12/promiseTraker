@@ -64,7 +64,7 @@ app.post("/tasks", async (req, res) => {
 
 app.post("/notifications/reply", async (req, res) => {
   try {
-    const { userId, taskId, status } = req.body;
+    const { userId, taskId, status,comment  } = req.body;
 
     // Retrieve the task information to get ownerName and taskName
     const user = await UserSchema.findById(userId);
@@ -76,7 +76,10 @@ app.post("/notifications/reply", async (req, res) => {
     const taskName = task.taskName;
     const ownerId = task.owner.id;
     // console.log(ownerId);
-
+    let description = `Task: ${taskName}`;
+    if (comment) {
+      description += `\nComment: ${comment}`; // Append comment to the description
+    }
     const newNotification = new Notification({
       title: `${user.name} ${
         status === "accepted" ? "accepted" : "rejected"
