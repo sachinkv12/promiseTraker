@@ -77,11 +77,11 @@ app.get("/countTasksByGroup/:taskGroupName", async (req, res) => {
 app.put("/category/:taskId", async (req, res) => {
   try {
     const taskId = req.params.taskId;
-    const { category, status } = req.body;
+    const { category, status,remark } = req.body;
 
     const updatedCategory = await Task.findByIdAndUpdate(
       taskId,
-      { $set: { category, status } },
+      { $set: { category, status,remark } },
       { new: true }
     );
 
@@ -96,4 +96,5 @@ app.put("/category/:taskId", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 module.exports = app;

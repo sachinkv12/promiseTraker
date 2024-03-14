@@ -97,12 +97,13 @@ Router.get("/registeredNames", async (req, res) => {
   try {
     const getData = await UserSchema.find();
 
-    const userNames = getData.map((item) => ({
-      id: item._id,
+    const userNamesEmail = getData.map((item) => ({
+      userId: item._id,
       name: item.name,
+      email: item.email,
     }));
 
-    res.json(userNames);
+    res.json(userNamesEmail);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");

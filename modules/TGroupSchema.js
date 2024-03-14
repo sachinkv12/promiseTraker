@@ -22,7 +22,7 @@ const taskGroupSchema = new mongoose.Schema({
   // },
   members: [
     {
-      id: { type: String, required: true },
+      userId: { type: String, required: true },
       name: { type: String, required: true },
     },
   ],
