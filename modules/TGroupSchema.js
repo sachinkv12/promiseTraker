@@ -6,11 +6,11 @@ const taskGroupSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  icon: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+  // icon: {
+  //   type: String,
+  //   required: true,
+  //   trim: true,
+  // },
   createdAt: Date,
   // selectedItems: {
   //   type: String,
@@ -26,6 +26,9 @@ const taskGroupSchema = new mongoose.Schema({
       name: { type: String, required: true },
     },
   ],
+  profilePic:{type:String},
+  deptHead:{type:String},
+  projectLead:{type:String},
 });
 
 const TGroupSchema = mongoose.model("TaskGroup", taskGroupSchema);

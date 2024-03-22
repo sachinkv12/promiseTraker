@@ -46,11 +46,13 @@ app.post("/tasks", async (req, res) => {
         description: `New task: ${taskName}`,
         status: "pending",
         userid: userId, // Assign user id to userid
-        owner: `${ownerName}`,
+        owner: {
+          id: ownerId, // Correctly assign ownerId to id
+          name: ownerName, // Correctly assign ownerName to name
+        },
         taskId: taskId,
         created: new Date(),
       });
-
       await newNotification.save();
     }
 
@@ -81,7 +83,7 @@ app.post("/notifications/reply", async (req, res) => {
     }
 
     let title;
-    console.log(status,"status")
+    // console.log(status,"status")
     switch (status) {
       case "Accepted":
         title = `${user.name} accepted the task`;
@@ -184,7 +186,8 @@ app.put('/notifications/:taskid', async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
-// app.put('/tasks/:id', async (req, res) => {
+
+// app.put('/updatetasks/:id', async (req, res) => {
 //   const { id } = req.params;
 //   const { startDate, endDate, reminder, comment } = req.body;
 

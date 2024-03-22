@@ -1,21 +1,16 @@
 const express = require("express");
 const TGroupSchema = require("../modules/TGroupSchema");
 const Task = require("../modules/TaskSchema");
+const LevelsRoutes = require("./RoleLevels");
 
 const app = express.Router();
 app.post("/TGroups", async (req, res) => {
   try {
-    const { groupName, icon, members } = req.body;
-    // console.log('body ',req.body)
-    //          if (!groupName || !icon || !members) {
-    //           return res.status(400).json({ error: 'Missing required fields' });
-    //         }
-
-    // Create a new task object
+    const { groupName, members, profilePic } = req.body;
     const newTaskGroup = new TGroupSchema({
       groupName,
-      icon,
       members,
+      profilePic,
       createdAt: new Date(),
     });
 
@@ -29,7 +24,19 @@ app.post("/TGroups", async (req, res) => {
   }
 });
 
-app.get("/TGroups", async (req, res) => {
+// app.get("/TGroups", async (req, res) => {
+//   try {
+//     const taskGroups = await TGroupSchema.find().sort({ createdAt: -1 });
+
+//     res.json(taskGroups);
+//     // console.log("data", taskGroups);
+//   } catch (error) {
+//     console.error("Error fetching task groups:", error.message);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+app.get("/TGroups", LevelsRoutes, async (req, res) => {
+  console.log("mem");
   try {
     const taskGroups = await TGroupSchema.find().sort({ createdAt: -1 });
 
@@ -63,7 +70,7 @@ app.get("/tasks/:taskGroupId", async (req, res) => {
 
     // Find the TaskGroup by ID
     const taskGroup = await TGroupSchema.findById(taskGroupId);
-    console.log(taskGroup, "get");
+    // console.log(taskGroup, "get");
 
     if (!taskGroup) {
       return res.status(404).json({ message: "TaskGroup not found" });
@@ -80,28 +87,35 @@ app.get("/tasks/:taskGroupId", async (req, res) => {
 });
 
 app.put("/TGroup/:TGroupId", async (req, res) => {
-  const TGroupId = req.params.TGroupId; // Ensure TGroupId is only the _id value
+  const TGroupId = req.params.TGroupId;
 
-  const { groupName, icon, members } = req.body;
+  const { groupName, members, profilePic } = req.body;
 
   try {
-    const updatedTGroup = await TGroupSchema.findByIdAndUpdate(
-      TGroupId,
-      { groupName, icon, members },
-      { new: true }
-    );
+    // Retrieve the existing task group
+    const existingTGroup = await TGroupSchema.findById(TGroupId);
 
-    if (!updatedTGroup) {
+    if (!existingTGroup) {
       return res.status(404).json({ message: "TGroup not found" });
     }
 
+    // Merge the existing members with the new members from the request body
+    const updatedMembers = existingTGroup.members.concat(members || []);
+
+    // Update the task group with the new data
+    const updatedTGroup = await TGroupSchema.findByIdAndUpdate(
+      TGroupId,
+      { groupName, members: updatedMembers, profilePic },
+      { new: true }
+    );
+
     res.json(updatedTGroup);
-    // console.log(updatedTGroup, "update");
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 app.get("/members/:TGroupId", async (req, res) => {
   const TGroupId = req.params.TGroupId;
 
@@ -125,12 +139,13 @@ app.get("/members/:TGroupId", async (req, res) => {
   }
 });
 
-app.delete("/delete/:id", async (req, res) => {
-  const id = req.params.id;
+app.delete("/delete/:TGroupId", LevelsRoutes, async (req, res) => {
+  console.log("del");
+  const TGroupId = req.params.TGroupId;
 
   try {
     // Use Mongoose's findOneAndDelete to find and delete the document by ID
-    const deletedTask = await TGroupSchema.findOneAndDelete({ _id: id });
+    const deletedTask = await TGroupSchema.findOneAndDelete({ _id: TGroupId });
 
     if (deletedTask) {
       res.status(200).json({ message: "Task deleted successfully" });

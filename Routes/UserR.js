@@ -13,8 +13,8 @@ const storage = multer.memoryStorage(); // Store the file as a Buffer in memory
 const upload = multer({ storage: storage });
 
 Router.post("/registration", async (req, res) => {
-  const { name, mobilenumber, email, password } = req.body;
-
+  const { name, mobilenumber, email, password,userRole} = req.body;
+console.log(req.body,'sassasa')
   try {
     const existinguser = await UserSchema.findOne({ email: email });
     if (existinguser) {
@@ -28,6 +28,7 @@ Router.post("/registration", async (req, res) => {
       mobilenumber,
       email,
       password: hashedPassword,
+      userRole,
     });
     await newRegister.save();
     res.status(201).json({ message: "registration successfuly" });
@@ -58,6 +59,14 @@ Router.put("/users/:userId", async (req, res) => {
     // Update designation if provided
     if (req.body.designation) {
       user.designation = req.body.designation;
+    }
+
+    if (req.body.name) {
+      user.name = req.body.name;
+    }
+
+    if (req.body.mobilenumber) {
+      user.mobilenumber = req.body.mobilenumber;
     }
 
     await user.save();
@@ -121,4 +130,32 @@ Router.get("/registeredNames", async (req, res) => {
 //       res.status(500).json({ error: 'Internal Server Error' });
 //   }
 // });
+
+
+Router.put("/updateUserRole/:id", async (req, res) => {
+  const { id } = req.params; // Get the user ID from the URL parameters
+  const { userRole } = req.body; // Get the new userRole value from the request body
+
+  if (!userRole) {
+    return res.status(400).send("userRole is required.");
+  }
+
+  try {
+    const updatedUser = await UserSchema.findByIdAndUpdate(
+      id,
+      { userRole: userRole },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send("The user with the given ID was not found.");
+    }
+
+    res.send(updatedUser);
+    console.log(updatedUser,"role")
+  } catch (error) {
+    res.status(500).send("Something went wrong");
+  }
+});
+
 module.exports = Router;

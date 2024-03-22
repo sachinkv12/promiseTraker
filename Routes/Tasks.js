@@ -49,6 +49,25 @@ app.get("/countCompletedTasks", async (req, res) => {
   }
 });
 
+// app.get("/countCompletedTasks/:userId", async (req, res) => {
+//   try {
+//     const { userId } = req.params; // Extract userId from request parameters
+
+//     // Count tasks where status is 'Completed' and userId matches the specified userId
+//     const completedCount = await Task.countDocuments({ status: "Completed", userId: userId });
+
+//     // Count total tasks for the specified userId
+//     const totalCount = await Task.countDocuments({ userId: userId });
+
+//     // Return both counts in the response
+//     res.json({ completedCount, totalCount });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Error fetching counts", error: error.message });
+//   }
+// });
+
 app.get("/countTasksByGroup/:taskGroupName", async (req, res) => {
   try {
     // Get the task group name from path parameters

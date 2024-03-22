@@ -8,7 +8,6 @@ const taskSchema = new mongoose.Schema({
   taskName: { type: String },
   description: { type: String },
   people: [{ userId: String, name: String }],
-  
   startDate: { type: String },
   endDate: { type: String },
   reminder: { type: String },

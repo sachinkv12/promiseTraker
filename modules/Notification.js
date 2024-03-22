@@ -5,7 +5,10 @@ const notificationSchema = new mongoose.Schema({
   description: { type: String, required: true },
   status: { type: String, required: true },
   userid: { type: String},
-  owner: { type: String }, // Assuming 'owner' is a property in the notification
+  owner: {
+    id: String, // Assuming you have an ownerId variable
+    name: String
+  },// Assuming 'owner' is a property in the notification
   taskId:{ type: String },
   created: { type: Date, default: Date.now },
 });
