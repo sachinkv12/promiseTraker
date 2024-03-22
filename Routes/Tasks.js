@@ -33,7 +33,7 @@ app.put("/tasks/:taskId", async (req, res) => {
 });
 
 
-app.get("/countCompletedTasks", async (req, res) => {
+app.get("/countCompletedTasks/:userid", async (req, res) => {
   try {
     // Extract userId from query parameters
     const { userId } = req.query;
