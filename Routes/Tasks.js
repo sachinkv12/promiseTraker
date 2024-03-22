@@ -33,53 +33,28 @@ app.put("/tasks/:taskId", async (req, res) => {
 });
 
 
-// app.get("/countCompletedTasks", async (req, res) => {
-//   try {
-//     // Extract userId from query parameters
-//     const { userId } = req.query;
-
-//     // Validate userId is provided
-//     if (!userId) {
-//       return res.status(400).json({ message: "UserId is required" });
-//     }
-
-//     // Count tasks where status is 'Completed' for the given userId
-//     const completedCount = await Task.countDocuments({ userId, status: "Completed" });
-
-//     // Count total tasks for the given userId
-//     const totalCount = await Task.countDocuments({ userId });
-
-//     // Return both counts in the response
-//     res.json({ completedCount, totalCount });
-//   } catch (error) {
-//     res.status(500).json({ message: "Error fetching counts", error: error.message });
-//   }
-// });
-
-
-export const fetchCompletedTasksCount = (userId) => async dispatch => {
+app.get("/countCompletedTasks", async (req, res) => {
   try {
-    if (!userId) {
-      throw new Error('UserId is required');
-    }
-    const response = await fetch(`${BASE_URL}/countCompletedTasks?userId=${userId}`);
-    const data = await response.json();
-    dispatch({
-      type: 'FETCH_TASKS_COUNT_SUCCESS',
-      payload: {
-        completedCount: data.completedCount,
-        totalCount: data.totalCount,
-      },
-    });
-  } catch (error) {
-    console.error('Error fetching task counts:', error.message);
-    dispatch({
-      type: 'FETCH_TASKS_COUNT_FAILURE',
-      error: error.message,
-    });
-  }
-};
+    // Extract userId from query parameters
+    const { userId } = req.query;
 
+    // Validate userId is provided
+    if (!userId) {
+      return res.status(400).json({ message: "UserId is required" });
+    }
+
+    // Count tasks where status is 'Completed' for the given userId
+    const completedCount = await Task.countDocuments({ userId, status: "Completed" });
+
+    // Count total tasks for the given userId
+    const totalCount = await Task.countDocuments({ userId });
+
+    // Return both counts in the response
+    res.json({ completedCount, totalCount });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching counts", error: error.message });
+  }
+});
 
 
 // app.get("/countCompletedTasks", async (req, res) => {
