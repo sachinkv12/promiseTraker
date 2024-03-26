@@ -102,6 +102,20 @@ Router.get("/user/:userId", async (req, res) => {
   }
 });
 
+Router.get("/userData", async (req, res) => {
+  try {
+    // Fetch all users data
+    const allUserData = await UserSchema.find();
+
+    // Return all user data without filtering specific properties
+    res.json(allUserData);
+    // console.log(allUserData,"userdata")
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 Router.get("/registeredNames", async (req, res) => {
   try {
     const getData = await UserSchema.find();
@@ -110,6 +124,7 @@ Router.get("/registeredNames", async (req, res) => {
       userId: item._id,
       name: item.name,
       email: item.email,
+
     }));
 
     res.json(userNamesEmail);
@@ -119,17 +134,7 @@ Router.get("/registeredNames", async (req, res) => {
   }
 });
 
-// Router.get('/registeredNames', async (req, res) => {
-//   // console.log('sachi')
-//   try {
-//       const users = await UserSchema.find({}, '_id name');
-//       const simplifiedUsers = users.map(user => ({ _id: user._id, name: user.name }));
-//       res.json(simplifiedUsers);
-//   } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
+
 
 
 Router.put("/updateUserRole/:id", async (req, res) => {

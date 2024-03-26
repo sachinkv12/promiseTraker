@@ -9,7 +9,8 @@ const registerSchema = new mongoose.Schema({
   profilePic: { type: String },
   department: { type: String },
   designation: { type: String },
-  userRole: { type: Number, }
+  userRole: { type: Number, },
+  resetOTP:{type:Number},
 });
 const User = mongoose.model("User", registerSchema);
 module.exports = User;

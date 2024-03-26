@@ -2,19 +2,28 @@ const express = require("express");
 const TGroupSchema = require("../modules/TGroupSchema");
 const Task = require("../modules/TaskSchema");
 const LevelsRoutes = require("./RoleLevels");
+const bodyParser = require('body-parser');
 
 const app = express.Router();
-app.post("/TGroups", async (req, res) => {
+const customBodyParserMiddleware = bodyParser.json({ limit: '100mb' });
+
+app.post('/TGroups', customBodyParserMiddleware, async (req, res) => {
   try {
-    const { groupName, members, profilePic } = req.body;
+    let { groupName, deptHead, projectLead, members, profilePic } = req.body;
+
+    // Example transformation: take the first element if array, else use as is
+    deptHead = Array.isArray(deptHead) && deptHead.length > 0 ? deptHead[0] : deptHead;
+    projectLead = Array.isArray(projectLead) && projectLead.length > 0 ? projectLead[0] : projectLead;
+
     const newTaskGroup = new TGroupSchema({
-      groupName,
+      groupName,     
+      deptHead,
+      projectLead,
       members,
       profilePic,
       createdAt: new Date(),
     });
 
-    // await newGroup.save();
     const savedTaskGroup = await newTaskGroup.save();
     const allTaskGroups = await TGroupSchema.find();
     res.status(201).json({ savedTaskGroup, allTaskGroups });
@@ -23,6 +32,7 @@ app.post("/TGroups", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 // app.get("/TGroups", async (req, res) => {
 //   try {

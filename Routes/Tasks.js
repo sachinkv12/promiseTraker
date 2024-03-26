@@ -36,7 +36,7 @@ app.put("/tasks/:taskId", async (req, res) => {
 app.get("/countCompletedTasks/:userId", async (req, res) => {
   try {
     // Extract userId from query parameters
- console.log(req.params,"hgh")
+//  console.log(req.params,"hgh")
     const { userId } = req.params;
 
     // Validate userId is provided

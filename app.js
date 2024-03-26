@@ -6,6 +6,8 @@ const Signinroutes=require('./Routes/Signinroutes')
 const AddTask=require('./Routes/AddTask')
 const TaskGroup=require('./Routes/Tasks')
 const TGroupR = require('./Routes/TGroupR')
+const ForgetPassword =require('./Routes/Forgotpassword')
+const ResetPassword = require('./Routes/Resetpassword')
 const app = express();
 const PORT=5000;
 mongoose.connect('mongodb+srv://sachin:Project@cluster0.wxz5dsc.mongodb.net/?retryWrites=true&w=majority')
@@ -18,6 +20,8 @@ app.use('/api',Signinroutes);
 app.use('/api',AddTask);
 app.use('/api',TaskGroup);
 app.use('/api',TGroupR);
+app.use('/api',ForgetPassword);
+app.use('/api',ResetPassword);
 
 app.listen(PORT,()=>{
     console.log(`server is runinng on http://localhost:${PORT}`)
