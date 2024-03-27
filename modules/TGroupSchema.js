@@ -6,21 +6,9 @@ const taskGroupSchema = new mongoose.Schema({
     // required: true,
     // trim: true,
   }, 
-  deptHead:[
-    {
-      id: String,name:String
-    },
-  ],
-  projectLead:[
-    {
-      id: String,name:String
-    },
-  ],
-  members: [
-    {
-      id: String,name:String
-    },
-  ],
+  deptHead:[{ userId: String, name: String }],
+  projectLead:[{ userId: String, name: String }],
+  members:[{ userId: String, name: String }],
   profilePic:{type:String},
  
   createdAt: Date,

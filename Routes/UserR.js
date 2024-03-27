@@ -14,7 +14,7 @@ const upload = multer({ storage: storage });
 
 Router.post("/registration", async (req, res) => {
   const { name, mobilenumber, email, password,userRole} = req.body;
-console.log(req.body,'sassasa')
+// console.log(req.body,'sassasa')
   try {
     const existinguser = await UserSchema.findOne({ email: email });
     if (existinguser) {
@@ -105,10 +105,16 @@ Router.get("/user/:userId", async (req, res) => {
 Router.get("/userData", async (req, res) => {
   try {
     // Fetch all users data
-    const allUserData = await UserSchema.find();
-
+    const UserData = await UserSchema.find();
+    const allUserData = UserData.map((item) => ({
+      userId: item._id,
+      name: item.name,
+      email: item.email,
+      userRole:item.userRole,
+    }));
     // Return all user data without filtering specific properties
     res.json(allUserData);
+    // console.log(allUserData,"sachi")
     // console.log(allUserData,"userdata")
   } catch (error) {
     console.error("Error:", error);

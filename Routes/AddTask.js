@@ -8,6 +8,7 @@ const { Expo } = require("expo-server-sdk");
 const expo = new Expo();
 
 app.post("/tasks", async (req, res) => {
+ 
   try {
     const {
       owner,
@@ -19,6 +20,7 @@ app.post("/tasks", async (req, res) => {
       endDate,
       reminder,
     } = req.body;
+    // console.log(req.body,"data")
     const ownerId = owner.id; // Extracting owner id
     const ownerName = owner.name;
     const newTask = new Task({

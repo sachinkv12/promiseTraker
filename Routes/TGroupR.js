@@ -143,6 +143,7 @@ app.get("/members/:TGroupId", async (req, res) => {
 
     const members = tgroup.members;
     res.json(members);
+    // console.log(members,"members");
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
