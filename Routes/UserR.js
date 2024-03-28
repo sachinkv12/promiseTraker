@@ -169,4 +169,16 @@ Router.put("/updateUserRole/:id", async (req, res) => {
   }
 });
 
+Router.delete("/users/:id", async (req, res) => {
+  try {
+    const user = await UserSchema.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    res.send({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Server error", error: error.message });
+  }
+});
+
 module.exports = Router;

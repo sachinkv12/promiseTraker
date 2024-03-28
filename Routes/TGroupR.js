@@ -2,21 +2,25 @@ const express = require("express");
 const TGroupSchema = require("../modules/TGroupSchema");
 const Task = require("../modules/TaskSchema");
 const LevelsRoutes = require("./RoleLevels");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 const app = express.Router();
-const customBodyParserMiddleware = bodyParser.json({ limit: '100mb' });
+const customBodyParserMiddleware = bodyParser.json({ limit: "100mb" });
 
-app.post('/TGroups', customBodyParserMiddleware, async (req, res) => {
+app.post("/TGroups", customBodyParserMiddleware, async (req, res) => {
   try {
     let { groupName, deptHead, projectLead, members, profilePic } = req.body;
 
     // Example transformation: take the first element if array, else use as is
-    deptHead = Array.isArray(deptHead) && deptHead.length > 0 ? deptHead[0] : deptHead;
-    projectLead = Array.isArray(projectLead) && projectLead.length > 0 ? projectLead[0] : projectLead;
+    deptHead =
+      Array.isArray(deptHead) && deptHead.length > 0 ? deptHead[0] : deptHead;
+    projectLead =
+      Array.isArray(projectLead) && projectLead.length > 0
+        ? projectLead[0]
+        : projectLead;
 
     const newTaskGroup = new TGroupSchema({
-      groupName,     
+      groupName,
       deptHead,
       projectLead,
       members,
@@ -32,7 +36,6 @@ app.post('/TGroups', customBodyParserMiddleware, async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 // app.get("/TGroups", async (req, res) => {
 //   try {
@@ -99,7 +102,7 @@ app.get("/tasks/:taskGroupId", async (req, res) => {
 app.put("/TGroup/:TGroupId", async (req, res) => {
   const TGroupId = req.params.TGroupId;
 
-  const { groupName, members, profilePic } = req.body;
+  const { groupName, members, profilePic, deptHead, projectLead } = req.body;
 
   try {
     // Retrieve the existing task group
@@ -110,12 +113,22 @@ app.put("/TGroup/:TGroupId", async (req, res) => {
     }
 
     // Merge the existing members with the new members from the request body
+    const updatedeptHeads = existingTGroup.deptHead.concat(deptHead || []);
+    const updateprojectLeads = existingTGroup.projectLead.concat(
+      projectLead || []
+    );
     const updatedMembers = existingTGroup.members.concat(members || []);
 
     // Update the task group with the new data
     const updatedTGroup = await TGroupSchema.findByIdAndUpdate(
       TGroupId,
-      { groupName, members: updatedMembers, profilePic },
+      {
+        groupName,
+        members: updatedMembers,
+        profilePic,
+        projectLead: updateprojectLeads,
+        deptHead: updatedeptHeads,
+      },
       { new: true }
     );
 
@@ -151,7 +164,7 @@ app.get("/members/:TGroupId", async (req, res) => {
 });
 
 app.delete("/delete/:TGroupId", LevelsRoutes, async (req, res) => {
-  console.log("del");
+  // console.log("del");
   const TGroupId = req.params.TGroupId;
 
   try {
