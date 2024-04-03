@@ -189,28 +189,28 @@ app.put('/notifications/:taskid', async (req, res) => {
   }
 });
 
-// app.put('/updatetasks/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { startDate, endDate, reminder, comment } = req.body;
+app.put('/updatetasks/:id', async (req, res) => {
+  const { id } = req.params;
+  const { startDate, endDate, reminder, comment } = req.body;
 
-//   try {
-//     const updatedTask = await Task.findByIdAndUpdate(id, {
-//       $set: {
-//         startDate,
-//         endDate,
-//         reminder,
-//         comment
-//       }
-//     }, { new: true }); // { new: true } option returns the document after update
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(id, {
+      $set: {
+        startDate,
+        endDate,
+        reminder,
+        comment
+      }
+    }, { new: true }); // { new: true } option returns the document after update
 
-//     if (!updatedTask) {
-//       return res.status(404).send('Task not found');
-//     }
+    if (!updatedTask) {
+      return res.status(404).send('Task not found');
+    }
 
-//     res.send(updatedTask);
-//   } catch (error) {
-//     res.status(400).send('Error updating task: ' + error.message);
-//   }
-// });
+    res.send(updatedTask);
+  } catch (error) {
+    res.status(400).send('Error updating task: ' + error.message);
+  }
+});
 
 module.exports = app;

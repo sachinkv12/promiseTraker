@@ -35,30 +35,7 @@ app.put("/tasks/:taskId", async (req, res) => {
 });
 
 
-// app.get("/countCompletedTasks/:userId", async (req, res) => {
-//   try {
-    
-//     const { userId } = req.params;
-// console.log(userId,'userid')
-    
-//     if (!userId) {
-//       return res.status(400).json({ message: "UserId is required" });
-//     }
 
-//     // Count tasks where status is 'Completed' for the given userId
-//     const completedCount = await Task.countDocuments({ userId, status: "Completed" });
-
-//     // Count total tasks for the given userId
-//     const totalCount = await Task.countDocuments({ userId });
-//     //     const totalCount = await Task.countDocuments();
-
-
-//     // Return both counts in the response
-//     res.json({ completedCount, totalCount });
-//   } catch (error) {
-//     res.status(500).json({ message: "Error fetching counts", error: error.message });
-//   }
-// });
 
 app.get("/countCompletedTasks/:userId", async (req, res) => {
   try {
